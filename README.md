@@ -9,8 +9,7 @@ There are two ways using jsonschemal integrate with django 'middleware' or 'pars
             )  
   
 
-* parsers.py using speical parser to vaildate json with jsonschemal
-
+* parsers.py using speical parser to vaildate json with jsonschemal  
             """ add following to Django settings """  
             REST_FRAMEWORK = {  
               'DEFAULT_PARSER_CLASSES': (  
