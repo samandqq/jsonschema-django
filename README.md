@@ -3,9 +3,9 @@ There are two ways using jsonschemal integrate with django 'middleware' or 'pars
 
 * middleware.py is an example shows how to use django middleware to validate json with jsonschemal.  
             """ add following to Django settings """  
-            MIDDLEWARE_CLASSES += (
-              \....
-              'webapi.middleware.JsonMiddleware',
+            MIDDLEWARE_CLASSES += (  
+                 ....  
+              'webapi.middleware.JsonMiddleware',  
             )  
   
 
