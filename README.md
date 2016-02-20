@@ -6,13 +6,7 @@ JSONSchema is Common data format definition library, – Clear, human- and machi
 – Clean up logic code by separating validation code  
 – Validation code also can be reduced  
 
-[Understanding JSON Schema pdf]: http://spacetelescope.github.io/understanding-json-schema/UnderstandingJSONSchema.pdf "Understanding JSON Schema pdf"
-The home of JSON Schema
-Understanding JSON Schema pdf
-Understanding JSON Schema
-JSON Schema Lint
-generate schema tool
-
+[Understanding JSON Schema pdf](http://spacetelescope.github.io/understanding-json-schema/UnderstandingJSONSchema.pdf)<br />  
 
 ### Below are two ways using jsonschemal integrate with django 'middleware' or 'parsers'.  ###
 
