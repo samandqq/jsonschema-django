@@ -8,6 +8,12 @@ JSONSchema is Common data format definition library, – Clear, human- and machi
 
 [Understanding JSON Schema pdf](http://spacetelescope.github.io/understanding-json-schema/UnderstandingJSONSchema.pdf)<br />  
 
+## Requirements
+* Python 2.7+
+* Django 1.9+
+* jsonschema 2.5+
+
+
 ### The below is two ways show how to using jsonschema integrate with django: 'middleware' or 'parsers'.  ###
 
 * middleware.py is an example shows how to use django middleware to validate json with jsonschema.  
