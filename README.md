@@ -5,8 +5,8 @@
 
 """ add following to Django settings """  
 REST_FRAMEWORK = {  
->     'DEFAULT_PARSER_CLASSES': (  
->         'xxx.xxx.JSONSchemaParser',          
->     )  
+  'DEFAULT_PARSER_CLASSES': (  
+        'xxx.xxx.JSONSchemaParser',          
+     )  
 }
 
