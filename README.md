@@ -14,9 +14,9 @@ JSONSchema is Common data format definition library, – Clear, human- and machi
 * jsonschema 2.5+
 
 
-### The below are two ways show how to using jsonschema integrate with django: 'middleware' or 'parsers'.  ###
+### The below are two ways show how to using jsonschema integrate with django: 'middleware' or 'parsers'they are alternative.  ###
 
-* middleware.py is an example shows how to use django middleware to validate json with jsonschema.  
+* way 1: middleware.py is an example shows how to use django middleware to validate json with jsonschema.  
             """ add following to Django settings """  
             MIDDLEWARE_CLASSES += (  
                  ....  
@@ -24,7 +24,7 @@ JSONSchema is Common data format definition library, – Clear, human- and machi
             )  
   
 
-* parsers.py using speical parser to vaildate json with jsonschema  
+* way 2: parsers.py using speical parser to vaildate json with jsonschema  
             """ add following to Django settings """  
             REST_FRAMEWORK = {  
               'DEFAULT_PARSER_CLASSES': (  
