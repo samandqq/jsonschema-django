@@ -6,7 +6,15 @@ JSONSchema is Common data format definition library, – Clear, human- and machi
 – Clean up logic code by separating validation code  
 – Validation code also can be reduced  
 
-### There are two ways using jsonschemal integrate with django 'middleware' or 'parsers'.  ###
+[Understanding JSON Schema pdf]: http://spacetelescope.github.io/understanding-json-schema/UnderstandingJSONSchema.pdf "Understanding JSON Schema pdf"
+The home of JSON Schema
+Understanding JSON Schema pdf
+Understanding JSON Schema
+JSON Schema Lint
+generate schema tool
+
+
+### Below are two ways using jsonschemal integrate with django 'middleware' or 'parsers'.  ###
 
 * middleware.py is an example shows how to use django middleware to validate json with jsonschemal.  
             """ add following to Django settings """  
