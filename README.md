@@ -1,4 +1,4 @@
-# jsonschema-django
+# jsonschema with django example
 JSONSchema is Common data format definition library, – Clear, human- and machine-readable data format definition  
 * Use JSONSchema for input validation  
 – Strong validation, then avoid internal errors  
