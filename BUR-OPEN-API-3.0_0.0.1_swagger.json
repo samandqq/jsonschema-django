@@ -1,0 +1,823 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/Sam41/BUR-OPEN-API-3.0/0.0.1"
+  } ],
+  "info" : {
+    "description" : "This is a BUR API draft design, the operations available to external customers and New VPC Portal (aka NGP). \n<p>SwaggerHub visually renders our API contract as a fully interactive document for live workability, letting our customers know exactly how our API will work and behave, before integrating it into their code.\n<p></p>\n\n<br><b> hosts:</b>\n<br>&nbsp;&nbsp;&nbsp;&nbsp;Suspend and Resume existing BUR subscription for DXC or Customer Managed servers for customers using NBU-based backup service and New VPC Portal (aka NGP).</br>\n\n  &nbsp;&nbsp;&nbsp;&nbsp;Because this operation takes long time to complete so instead of the actual resource the API will return task id, you need to query actual resource use this task id after a short wait by requesting '/hosts/tasks/{task_id}'\n\n<br><b> reports:</b>\n<br>&nbsp;&nbsp;&nbsp;&nbsp;Offer static (pre-defined) BSR reports via JSON based externally facing API.</br>\n  \n  &nbsp;&nbsp;&nbsp;&nbsp;Because this operation takes long time to complete so you need to use returned id to query actual resource after a short wait (TBD as this can be 20 seconds or as much as 60) by requesting '/reports/{id}'</br>\n  \n  &nbsp;&nbsp;&nbsp;&nbsp;Only the following reports are currently supported:\n  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BUR-301, BUR-302, BUR-303, BUR-401, BUR-501, BUR-601, BUR-701, BUR-801, BUR-802, BUR-901</br>\n  \n<br><b> histories:</b>\n<br>&nbsp;&nbsp;&nbsp;&nbsp;This API gives info about the history of suspend/resume BUR subscription.</br>\n\n<br><b> version:</b>\n<br>&nbsp;&nbsp;&nbsp;&nbsp;This API is to get detail version info of BUR Service API.</br>\n",
+    "version" : "0.0.1",
+    "title" : "Simple BUR API"
+  },
+  "tags" : [ {
+    "name" : "reports",
+    "description" : "Finds reports"
+  }, {
+    "name" : "hosts",
+    "description" : "Suspend or resume customer hosts"
+  }, {
+    "name" : "histories",
+    "description" : "Find suspend/resume history"
+  }, {
+    "name" : "version",
+    "description" : "Get detail version info of BUR Service API"
+  } ],
+  "paths" : {
+    "/api/v2/bur/reports/" : {
+      "post" : {
+        "tags" : [ "reports" ],
+        "summary" : "create report",
+        "operationId" : "createReport",
+        "description" : "By passing in the appropriate options, you can search for\navailable report in the system. \n<BR>Because this operation takes long time to complete so you need to use returned id to query actual resource after a short wait (TBD as this can be 20 seconds or as much as 60) by requesting '/reports/{id}'\n",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "X-SUBJECT-TOKEN",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        }, {
+          "in" : "header",
+          "name" : "X-API-VERSION",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "header",
+          "name" : "x-auth-endpoint-context",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReportsPostItem"
+              }
+            }
+          },
+          "description" : "Post report object",
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "create results",
+            "content" : {
+              "application/json" : {
+                "example" : {
+                  "id" : "fb08d007-0e5e-3d51-b1fa-a1c9af64308c"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad input parameter"
+          },
+          "404" : {
+            "description" : "Not found"
+          }
+        },
+        "security" : [ {
+          "bur_auth" : [ "bur.client" ]
+        } ]
+      }
+    },
+    "/api/v2/bur/reports/{id}" : {
+      "get" : {
+        "tags" : [ "reports" ],
+        "summary" : "searches report by id",
+        "operationId" : "searchReport",
+        "description" : "By passing in the appropriate options, you can search for\navailable report in the system\n",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "X-SUBJECT-TOKEN",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        }, {
+          "in" : "header",
+          "name" : "X-API-VERSION",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "header",
+          "name" : "x-auth-endpoint-context",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "id",
+          "description" : "report id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ReportItem"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad input parameter"
+          },
+          "404" : {
+            "description" : "Not found"
+          }
+        },
+        "security" : [ {
+          "bur_auth" : [ "bur.client" ]
+        } ]
+      }
+    },
+    "/api/v2/bur/hosts/{host_name}" : {
+      "get" : {
+        "tags" : [ "hosts" ],
+        "summary" : "Query host by host name",
+        "operationId" : "searchHost",
+        "description" : "By passing in the appropriate options, you can search for\navailable host in the system\n",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "X-SUBJECT-TOKEN",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        }, {
+          "in" : "header",
+          "name" : "X-API-VERSION",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "header",
+          "name" : "x-auth-endpoint-context",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "dc_name",
+          "description" : "DC name",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "host_name",
+          "description" : "host name",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HostRespItem"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad input parameter"
+          },
+          "404" : {
+            "description" : "Host name not found"
+          }
+        },
+        "security" : [ {
+          "bur_auth" : [ "bur.client" ]
+        } ]
+      }
+    },
+    "/api/v2/bur/hosts" : {
+      "put" : {
+        "tags" : [ "hosts" ],
+        "summary" : "Suspend/Resume existing hosts",
+        "description" : "Because this operation takes long time to complete so instead of the actual resource the API will return task id, you need to query actual resource use this task id after a short wait by requesting '/hosts/tasks/{task_id}'\n",
+        "operationId" : "updateHosts",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "X-SUBJECT-TOKEN",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        }, {
+          "in" : "header",
+          "name" : "X-API-VERSION",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "header",
+          "name" : "x-auth-endpoint-context",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/HostPutReqItem"
+              }
+            }
+          },
+          "description" : "Updated host object",
+          "required" : true
+        },
+        "responses" : {
+          "202" : {
+            "description" : "update results",
+            "content" : {
+              "application/json" : {
+                "example" : {
+                  "task_id" : "fb08d007-0e5e-3d51-b1fa-a1c9af64308c"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad input parameter"
+          }
+        },
+        "security" : [ {
+          "bur_auth" : [ "bur.client", "bur.client" ]
+        } ]
+      }
+    },
+    "/api/v2/bur/hosts/tasks/{task_id}" : {
+      "get" : {
+        "tags" : [ "hosts" ],
+        "summary" : "searches host",
+        "operationId" : "searchHost",
+        "description" : "By passing in the appropriate options, you can search for\navailable host in the system\n",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "X-SUBJECT-TOKEN",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        }, {
+          "in" : "header",
+          "name" : "X-API-VERSION",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "header",
+          "name" : "x-auth-endpoint-context",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "task_id",
+          "description" : "task id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "202" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "oneOf" : [ {
+                      "$ref" : "#/components/schemas/HostRespResutItem"
+                    }, {
+                      "$ref" : "#/components/schemas/HostRespErrorResutItem"
+                    } ]
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad input parameter"
+          },
+          "404" : {
+            "description" : "Not found"
+          }
+        },
+        "security" : [ {
+          "bur_auth" : [ "bur.client" ]
+        } ]
+      }
+    },
+    "/api/v2/bur/histories" : {
+      "get" : {
+        "tags" : [ "histories" ],
+        "summary" : "searches history",
+        "operationId" : "searchHistory",
+        "description" : "By passing in the appropriate options, you can search for\nhistory in the system\n",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "X-SUBJECT-TOKEN",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        }, {
+          "in" : "header",
+          "name" : "X-API-VERSION",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "header",
+          "name" : "x-auth-endpoint-context",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "dc_name",
+          "description" : "DC name",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "host_name",
+          "description" : "host name",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "action",
+          "description" : "update",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "startDate",
+          "description" : "action datetime",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "endDate",
+          "description" : "action datetime",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "page",
+          "description" : "The page number.",
+          "schema" : {
+            "type" : "integer",
+            "default" : 1
+          }
+        }, {
+          "in" : "query",
+          "name" : "page_size",
+          "description" : "The number of items to list per page.",
+          "schema" : {
+            "type" : "integer",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HistoriesItem"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad input parameter"
+          },
+          "404" : {
+            "description" : "Not found"
+          }
+        },
+        "security" : [ {
+          "bur_auth" : [ "bur.client" ]
+        } ]
+      }
+    },
+    "/api/v2/bur/histories/requests/{id}" : {
+      "get" : {
+        "tags" : [ "histories" ],
+        "summary" : "searches history",
+        "operationId" : "searchHistory",
+        "description" : "By passing in the appropriate options, you can search for\nhistory in the system\n",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "X-SUBJECT-TOKEN",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        }, {
+          "in" : "header",
+          "name" : "X-API-VERSION",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "header",
+          "name" : "x-auth-endpoint-context",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "id",
+          "description" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HostPutReqItem"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad input parameter"
+          },
+          "404" : {
+            "description" : "Not found"
+          }
+        },
+        "security" : [ {
+          "bur_auth" : [ "bur.client" ]
+        } ]
+      }
+    },
+    "/api/v2/bur/histories/responses/{id}" : {
+      "get" : {
+        "tags" : [ "histories" ],
+        "summary" : "searches history",
+        "operationId" : "searchHistory",
+        "description" : "By passing in the appropriate options, you can search for\nhistory in the system\n",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "X-SUBJECT-TOKEN",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        }, {
+          "in" : "header",
+          "name" : "X-API-VERSION",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "header",
+          "name" : "x-auth-endpoint-context",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "id",
+          "description" : "id",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "oneOf" : [ {
+                      "$ref" : "#/components/schemas/HostRespResutItem"
+                    }, {
+                      "$ref" : "#/components/schemas/HostRespErrorResutItem"
+                    } ]
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad input parameter"
+          },
+          "404" : {
+            "description" : "Not found"
+          }
+        },
+        "security" : [ {
+          "bur_auth" : [ "bur.client" ]
+        } ]
+      }
+    },
+    "/api/version/" : {
+      "get" : {
+        "tags" : [ "version" ],
+        "summary" : "Get BUR Service API Version",
+        "operationId" : "getVersion",
+        "description" : "Get BUR Service API Version\n",
+        "parameters" : [ {
+          "in" : "header",
+          "name" : "X-SUBJECT-TOKEN",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true
+        }, {
+          "in" : "header",
+          "name" : "x-auth-endpoint-context",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Get BUR Service API Version",
+            "content" : {
+              "application/json" : {
+                "example" : {
+                  "version" : "1.0.0",
+                  "modules" : [ {
+                    "api4bur" : "1.0.0",
+                    "code_version" : "1.0.0",
+                    "code_sha" : " 1178805542c3426975c727ed573fa5a741288b08",
+                    "cookbook_version" : "1.0.0"
+                  }, {
+                    "venv" : "1.0.0",
+                    "common4api" : {
+                      "code_version" : "1.4.2",
+                      "code_sha" : " 467f88c1b52f31b37c2b9136df80f62ff17f7ead"
+                    }
+                  } ]
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found"
+          }
+        },
+        "security" : [ {
+          "bur_auth" : [ "bur.client" ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "ReportsPostItem" : {
+        "type" : "object",
+        "required" : [ "dc_name", "report_code" ],
+        "properties" : {
+          "dc_name" : {
+            "type" : "string",
+            "example" : "DC1"
+          },
+          "report_code" : {
+            "type" : "string",
+            "enum" : [ "BUR-301", "BUR-302", "BUR-303", "BUR-401", "BUR-501", "BUR-601", "BUR-701", "BUR-801", "BUR-802", "BUR-901" ],
+            "example" : "BUR-301"
+          }
+        }
+      },
+      "HistoriesItem" : {
+        "type" : "object",
+        "required" : [ "count", "next", "previous", "results" ],
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "example" : 100
+          },
+          "next" : {
+            "type" : "string",
+            "example" : "./histories?dc_name=xxxDC&name=host1&action=Update&page=3&page_size=20"
+          },
+          "previous" : {
+            "type" : "string",
+            "example" : "./histories?dc_name=xxxDC&name=host1&action=Update&page=1&page_size=20"
+          },
+          "results" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/HistoryItem"
+            }
+          }
+        }
+      },
+      "HistoryItem" : {
+        "type" : "object",
+        "required" : [ "user_id", "tenant_id", "dc_name", "host_name", "action", "request", "response", "action_date" ],
+        "properties" : {
+          "user_id" : {
+            "type" : "string",
+            "example" : 111
+          },
+          "tenant_id" : {
+            "type" : "string",
+            "example" : 12345
+          },
+          "dc_name" : {
+            "type" : "string",
+            "example" : "atc"
+          },
+          "host_name" : {
+            "type" : "string",
+            "example" : "pln-n2-nbmastc1"
+          },
+          "action" : {
+            "type" : "string",
+            "example" : "update"
+          },
+          "request" : {
+            "type" : "string",
+            "example" : "./histories/requests/4be658cf-b4ce-11e8-b8ad-e533ea228a75"
+          },
+          "response" : {
+            "type" : "string",
+            "example" : "./histories/responses/4be658cf-b4ce-11e8-b8ad-e533ea228a75"
+          },
+          "action_date" : {
+            "type" : "string",
+            "example" : "08/13/2018 13:34:59"
+          }
+        }
+      },
+      "ReportItem" : {
+        "type" : "object",
+        "required" : [ "Client", "Server", "Group", "status" ],
+        "properties" : {
+          "Client" : {
+            "type" : "string",
+            "example" : "hpmhanabur-0090"
+          },
+          "Server" : {
+            "type" : "string",
+            "example" : "pln-n2-nbmastc1"
+          },
+          "Group" : {
+            "type" : "string",
+            "example" : "groupA"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "failed"
+          }
+        }
+      },
+      "HostRespResutItem" : {
+        "type" : "object",
+        "required" : [ "client_host_name", "next", "previous", "results" ],
+        "properties" : {
+          "client_host_name" : {
+            "type" : "string",
+            "example" : "pln-n2-nbmastc1"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "OK"
+          },
+          "results" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/HostRespItem"
+            }
+          }
+        }
+      },
+      "HostRespErrorResutItem" : {
+        "type" : "object",
+        "required" : [ "client_host_name", "next", "previous", "results" ],
+        "properties" : {
+          "client_host_name" : {
+            "type" : "string",
+            "example" : "pln-n2-nbmastc2"
+          },
+          "status" : {
+            "type" : "string",
+            "example" : "Failed"
+          },
+          "results" : {
+            "type" : "object",
+            "example" : {
+              "code" : "0287E",
+              "subject" : "client host name is not exsit.",
+              "description" : ""
+            }
+          }
+        }
+      },
+      "HostPutReqItem" : {
+        "type" : "object",
+        "required" : [ "dc_name", "hosts" ],
+        "properties" : {
+          "dc_name" : {
+            "type" : "string",
+            "example" : "DC1"
+          },
+          "hosts" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/HostReqItem"
+              }, {
+                "example" : {
+                  "client_host_name" : "pln-n2-nbmastc2",
+                  "action" : "resume"
+                }
+              } ]
+            }
+          }
+        }
+      },
+      "HostRespItem" : {
+        "type" : "object",
+        "required" : [ "client_host_name", "offline_for_backup", "offline_until" ],
+        "properties" : {
+          "client_host_name" : {
+            "type" : "string",
+            "example" : "pln-n2-nbmastc1"
+          },
+          "offline_for_backup" : {
+            "type" : "string",
+            "example" : "Yes"
+          },
+          "offline_until" : {
+            "type" : "string",
+            "example" : "01/31/2019 14:34:18"
+          }
+        }
+      },
+      "HostReqItem" : {
+        "type" : "object",
+        "required" : [ "client_host_name", "offline_until", "action" ],
+        "properties" : {
+          "client_host_name" : {
+            "type" : "string",
+            "example" : "pln-n2-nbmastc1"
+          },
+          "action" : {
+            "type" : "string",
+            "enum" : [ "suspend", "resume" ]
+          },
+          "offline_until" : {
+            "type" : "string",
+            "example" : "01/31/2019 14:34:18"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "bur_auth" : {
+        "type" : "oauth2",
+        "flows" : {
+          "implicit" : {
+            "authorizationUrl" : "http://bur.swagger.io/oauth/dialog",
+            "scopes" : {
+              "bur.client" : "Grants client role permission",
+              "bur.admin" : "Grants admin permission"
+            }
+          }
+        }
+      }
+    }
+  }
+}
