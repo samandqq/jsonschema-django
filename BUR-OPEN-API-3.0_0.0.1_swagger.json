@@ -1,11 +1,14 @@
 {
   "openapi" : "3.0.0",
   "servers" : [ {
-    "url" : "https://virtserver.swaggerhub.com/Sam41/BUR-OPEN-API-3.0/0.0.1"
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/Sam41/BUR-Service/1.0.0"
+  }, {
+    "url" : "https://virtserver.swaggerhub.com/Sam41/BUR-OPEN-API-3.0/1.0.0"
   } ],
   "info" : {
     "description" : "This is a BUR API draft design, the operations available to external customers and New VPC Portal (aka NGP). \n<p>SwaggerHub visually renders our API contract as a fully interactive document for live workability, letting our customers know exactly how our API will work and behave, before integrating it into their code.\n<p></p>\n\n<br><b> hosts:</b>\n<br>&nbsp;&nbsp;&nbsp;&nbsp;Suspend and Resume existing BUR subscription for DXC or Customer Managed servers for customers using NBU-based backup service and New VPC Portal (aka NGP).</br>\n\n  &nbsp;&nbsp;&nbsp;&nbsp;Because this operation takes long time to complete so instead of the actual resource the API will return task id, you need to query actual resource use this task id after a short wait by requesting '/hosts/tasks/{task_id}'\n\n<br><b> reports:</b>\n<br>&nbsp;&nbsp;&nbsp;&nbsp;Offer static (pre-defined) BSR reports via JSON based externally facing API.</br>\n  \n  &nbsp;&nbsp;&nbsp;&nbsp;Because this operation takes long time to complete so you need to use returned id to query actual resource after a short wait (TBD as this can be 20 seconds or as much as 60) by requesting '/reports/{id}'</br>\n  \n  &nbsp;&nbsp;&nbsp;&nbsp;Only the following reports are currently supported:\n  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BUR-301, BUR-302, BUR-303, BUR-401, BUR-501, BUR-601, BUR-701, BUR-801, BUR-802, BUR-901</br>\n  \n<br><b> histories:</b>\n<br>&nbsp;&nbsp;&nbsp;&nbsp;This API gives info about the history of suspend/resume BUR subscription.</br>\n\n<br><b> version:</b>\n<br>&nbsp;&nbsp;&nbsp;&nbsp;This API is to get detail version info of BUR Service API.</br>\n",
-    "version" : "0.0.1",
+    "version" : "1.0.0",
     "title" : "Simple BUR API"
   },
   "tags" : [ {
@@ -376,14 +379,14 @@
           }
         }, {
           "in" : "query",
-          "name" : "startDate",
+          "name" : "start_date",
           "description" : "action datetime",
           "schema" : {
             "type" : "string"
           }
         }, {
           "in" : "query",
-          "name" : "endDate",
+          "name" : "end_date",
           "description" : "action datetime",
           "schema" : {
             "type" : "string"
@@ -616,6 +619,14 @@
             "type" : "string",
             "enum" : [ "BUR-301", "BUR-302", "BUR-303", "BUR-401", "BUR-501", "BUR-601", "BUR-701", "BUR-801", "BUR-802", "BUR-901" ],
             "example" : "BUR-301"
+          },
+          "country" : {
+            "type" : "string",
+            "example" : "UK"
+          },
+          "site" : {
+            "type" : "string",
+            "example" : "Cle"
           }
         }
       },
